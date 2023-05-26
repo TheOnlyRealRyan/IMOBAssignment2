@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">IMOB301 Assignment</string>
+
+    <string-array name="app_roles">
+        <item>Student</item>
+        <item>Instructor</item>
+        <item>Admin</item>
+    </string-array>
+    <string name="title_activity_action_detail_host">ActionDetailHostActivity</string>
+    <string name="title_action_list">Actions</string>
+    <string name="title_action_detail">Action Detail</string>
+</resources>

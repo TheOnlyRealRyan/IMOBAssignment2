@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddStudent">
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Surname"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Date Of Birth"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout8" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/studentDOB" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/studentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/studentSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <EditText
+        android:id="@+id/studentDOB"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout9"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/studentPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/addStudentBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
