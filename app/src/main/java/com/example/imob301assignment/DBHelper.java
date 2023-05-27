@@ -10,11 +10,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "TaskManager.db";
 
     public DBHelper(Context context) {
-        super(context, DB_NAME, null, 1);
+        super(context, DB_NAME, null, 2);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         String taskSQL = "CREATE TABLE Tasks (taskID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "name VARCHAR(255), dueDate DATETIME, moduleID INTEGER, " +
                         "FOREIGN KEY (moduleID) REFERENCES Modules(moduleID) )";
@@ -23,7 +24,8 @@ public class DBHelper extends SQLiteOpenHelper {
                             "name VARCHAR(255), duration INTEGER)";
 
         String studentsSQL = "CREATE TABLE Students (studentID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                            "name VARCHAR(100), surname VARCHAR(100), password VARCHAR(255), dob DATE )";
+                            "name VARCHAR(100), surname VARCHAR(100), password VARCHAR(255), " +
+                            "username VARCHAR(255), dob DATE )";
 
         String instructorSQL = "CREATE TABLE Instructors (instructorID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                 "username VARCHAR(255), password VARCHAR(255) )";
@@ -46,7 +48,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS Tasks");
         db.execSQL("DROP TABLE IF EXISTS Students");
         db.execSQL("DROP TABLE IF EXISTS Modules");
-        db.execSQL("DROP TABLE IF EXISTS Modules");
+        db.execSQL("DROP TABLE IF EXISTS Instructors");
 
         onCreate(db);
     }
@@ -62,6 +64,17 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + tableName, null);
+        return cursor;
+    }
+
+    public Cursor getUser(String tableName, String userName, String userPass) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + tableName + " WHERE username = '" + userName +
+                        "' AND password = '" + userPass + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+
         return cursor;
     }
 }

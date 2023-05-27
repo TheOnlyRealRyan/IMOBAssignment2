@@ -65,6 +65,7 @@ public class ActionListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentActionListBinding.inflate(inflater, container, false);
+
         return binding.getRoot();
 
     }
@@ -104,11 +105,15 @@ public class ActionListFragment extends Fragment {
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<PlaceholderContent.PlaceholderItem> mValues;
+        private List<PlaceholderContent.PlaceholderItem> mValues;
         private final View mItemDetailFragmentContainer;
 
         SimpleItemRecyclerViewAdapter(List<PlaceholderContent.PlaceholderItem> items,
                                       View itemDetailFragmentContainer) {
+            if (items.isEmpty()) {
+                updateList();
+            }
+
             mValues = items;
             mItemDetailFragmentContainer = itemDetailFragmentContainer;
         }
@@ -120,6 +125,23 @@ public class ActionListFragment extends Fragment {
                     ActionListContentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new ViewHolder(binding);
 
+        }
+
+        void updateList() {
+            String role = MainActivity.preferences.getString("role", "student");
+
+            if (role.equals("admin")) {
+                PlaceholderContent.addItem(new PlaceholderContent.PlaceholderItem("1", "Create Module", R.layout.activity_create_module));
+                PlaceholderContent.addItem(new PlaceholderContent.PlaceholderItem("2", "Add Instructor", R.layout.activity_add_instructor));
+                PlaceholderContent.addItem(new PlaceholderContent.PlaceholderItem("3", "Add Student", R.layout.activity_add_student));
+                PlaceholderContent.addItem(new PlaceholderContent.PlaceholderItem("4", "Logout", 0));
+            } else if (role.equals("instructor")) {
+                PlaceholderContent.addItem(new PlaceholderContent.PlaceholderItem("1", "Add Task", R.layout.activity_add_task));
+                PlaceholderContent.addItem(new PlaceholderContent.PlaceholderItem("2", "Logout", 0));
+            } else {
+                PlaceholderContent.addItem(new PlaceholderContent.PlaceholderItem("1", "View Tasks", R.layout.activity_view_tasks));
+                PlaceholderContent.addItem(new PlaceholderContent.PlaceholderItem("2", "Logout", 0));
+            }
         }
 
         @Override

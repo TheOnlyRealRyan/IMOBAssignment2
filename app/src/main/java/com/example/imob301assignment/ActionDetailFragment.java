@@ -1,11 +1,13 @@
 package com.example.imob301assignment;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.DragEvent;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.example.imob301assignment.placeholder.PlaceholderContent;
 import com.example.imob301assignment.databinding.FragmentActionDetailBinding;
+
+import java.lang.reflect.Method;
 
 /**
  * A fragment representing a single Action detail screen.
@@ -77,6 +81,11 @@ public class ActionDetailFragment extends Fragment {
 //        mToolbarLayout = rootView.findViewById(R.id.toolbar_layout);
         mTextView = binding.actionDetail;
 
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null) {
+            activity.getSupportActionBar().setTitle(mItem.actionName);
+        }
+
         // Show the placeholder content as text in a TextView & in the toolbar if available.
         updateContent();
         rootView.setOnDragListener(dragListener);
@@ -91,11 +100,28 @@ public class ActionDetailFragment extends Fragment {
 
     private void updateContent() {
         if (mItem != null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View child = inflater.inflate(mItem.actionLayout, null);
+            Context context = getContext();
 
-            binding.baseContainer.addView(child);
+            if (mItem.actionLayout != 0) {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View child = inflater.inflate(mItem.actionLayout, null);
 
+                binding.baseContainer.addView(child);
+            }
+
+            ActivityFunctionality activityFunctionality = new ActivityFunctionality(
+                context, binding.baseContainer
+            );
+
+            String methodName = mItem.actionName.replaceAll(" ", "");
+
+            try {
+                Method method = activityFunctionality.getClass().getMethod(methodName);
+                method.invoke(activityFunctionality);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
