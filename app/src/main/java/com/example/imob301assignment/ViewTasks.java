@@ -18,11 +18,7 @@ public class ViewTasks extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*
-        String[] listOfTasks = getAllItems("Tasks");
-        setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listOfTasks));
 
-         */
     }
 
 }

@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.imob301assignment.placeholder.PlaceholderContent;
@@ -233,11 +236,11 @@ public class ActivityFunctionality {
         });
     }
     public void ViewTasks(){
-        Cursor cursor = myDB.getAllItems("Tasks") ;
-        List<String> taskIDs = new ArrayList<>() ;
-        List<String> names = new ArrayList<>() ;
-        List<String> moduleIDs = new ArrayList<>() ;
-        List<String> dueDates = new ArrayList<>() ;
+        Cursor cursor = myDB.getAllItems("Tasks");
+        List<String> taskIDs = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        List<String> moduleIDs = new ArrayList<>();
+        List<String> dueDates = new ArrayList<>();
 
         int COL_1 = cursor.getColumnIndex ("taskID");
         int COL_2 = cursor.getColumnIndex ("name");
@@ -253,7 +256,11 @@ public class ActivityFunctionality {
             moduleIDs.add(itemModuleID);
             dueDates.add(itemDueDate);
         }
-        String x = "";
+        // String x = "";
+        ListView taskListView = _baseView.findViewById(R.id.taskListView);
+        taskListView.setAdapter(new ArrayAdapter<String>(_context, android.R.layout.simple_list_item_1, names));
+
+
     }
 
     public void Logout() {
