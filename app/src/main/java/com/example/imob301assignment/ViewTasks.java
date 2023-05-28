@@ -1,14 +1,33 @@
 package com.example.imob301assignment;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.ListActivity;
+import android.content.Context;
 import android.os.Bundle;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
-public class ViewTasks extends AppCompatActivity {
+import java.util.List;
 
+public class ViewTasks extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_tasks);
+        /*
+        String[] listOfTasks = getAllItems("Tasks");
+        setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listOfTasks));
+
+         */
     }
+
 }
+
+
+
+
+

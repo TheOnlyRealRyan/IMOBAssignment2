@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String taskSQL = "CREATE TABLE Tasks (taskID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "name VARCHAR(255), dueDate DATETIME, moduleID INTEGER, " +
+                        "name VARCHAR(255), dueDate DATE, moduleID INTEGER, " +
                         "FOREIGN KEY (moduleID) REFERENCES Modules(moduleID) )";
 
         String modulesSQL = "CREATE TABLE Modules (moduleID INTEGER PRIMARY KEY AUTOINCREMENT, " +
