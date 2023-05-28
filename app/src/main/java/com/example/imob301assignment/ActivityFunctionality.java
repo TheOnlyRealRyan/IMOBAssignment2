@@ -5,19 +5,27 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.imob301assignment.placeholder.PlaceholderContent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -34,6 +42,87 @@ public class ActivityFunctionality {
         _context = context;
         _baseView = baseView;
         myDB = new DBHelper(_context);
+    }
+
+    class TaskAdapter extends BaseAdapter {
+        List<String> taskIDs;
+        List<String> taskNames;
+        List<String> moduleIDs;
+        List<String> taskDueDates;
+        List<Integer> taskCompleted;
+
+        public TaskAdapter(
+            List<String> ids, List<String> names, List<String> moduleIds,
+            List<String> dueDates, List<Integer> completedTasks
+        ) {
+            taskIDs = ids;
+            taskNames = names;
+            moduleIDs = moduleIds;
+            taskDueDates = dueDates;
+            taskCompleted = completedTasks;
+        }
+        @Override
+        public int getCount() {
+            return taskIDs.toArray().length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(_context).inflate(R.layout.task_item, parent, false);
+            }
+
+            TextView taskID = convertView.findViewById(R.id.itemTaskId);
+            taskID.setText(taskIDs.get(position));
+
+            TextView taskName = convertView.findViewById(R.id.itemTaskName);
+            taskName.setText(taskNames.get(position));
+
+            TextView taskDueDate = convertView.findViewById(R.id.itemTaskDueDate);
+            taskDueDate.setText("Due Date: " + taskDueDates.get(position));
+
+            TextView taskModuleID = convertView.findViewById(R.id.itemTaskModuleId);
+            taskModuleID.setText("Module ID: " + moduleIDs.get(position));
+
+            CheckBox completed = convertView.findViewById(R.id.itemTaskCompleted);
+            boolean val = false;
+
+            if (taskCompleted.get(position) == 1) {
+                val = true;
+            }
+
+            completed.setChecked(val);
+
+            completed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    boolean result = myDB.updateCompletion(taskIDs.get(position), b);
+
+                    if (result) {
+                        Toast.makeText(
+                            _context, "Task Completion Status Changed!", Toast.LENGTH_SHORT
+                        ).show();
+                    } else {
+                        Toast.makeText(
+                            _context, "Unknown Error Occurred!", Toast.LENGTH_SHORT
+                        ).show();
+
+                    }
+                }
+            });
+
+            return  convertView;
+        }
     }
 
     public void AddInstructor() {
@@ -241,24 +330,32 @@ public class ActivityFunctionality {
         List<String> names = new ArrayList<>();
         List<String> moduleIDs = new ArrayList<>();
         List<String> dueDates = new ArrayList<>();
+        List<Integer> completedTasks = new ArrayList<>();
 
         int COL_1 = cursor.getColumnIndex ("taskID");
         int COL_2 = cursor.getColumnIndex ("name");
         int COL_3 = cursor.getColumnIndex ("moduleID");
         int COL_4 = cursor.getColumnIndex ("dueDate");
+        int COL_5 = cursor.getColumnIndex("completed");
+
         while (cursor.moveToNext()) {
             String itemID = cursor.getString(COL_1);
             String itemName = cursor.getString(COL_2);
             String itemModuleID = cursor.getString(COL_3);
             String itemDueDate = cursor.getString(COL_4);
+            int itemCompleted = cursor.getInt(COL_5);
+
             taskIDs.add(itemID);
             names.add(itemName);
             moduleIDs.add(itemModuleID);
             dueDates.add(itemDueDate);
+            completedTasks.add(itemCompleted);
         }
         // String x = "";
         ListView taskListView = _baseView.findViewById(R.id.taskListView);
-        taskListView.setAdapter(new ArrayAdapter<String>(_context, android.R.layout.simple_list_item_1, names));
+        taskListView.setAdapter(
+            new TaskAdapter(taskIDs, names, moduleIDs, dueDates, completedTasks)
+        );
 
 
     }

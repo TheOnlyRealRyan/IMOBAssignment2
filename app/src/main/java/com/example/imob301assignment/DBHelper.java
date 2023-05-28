@@ -77,4 +77,20 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
+
+    public boolean updateCompletion(String id, boolean newVal) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String val = "FALSE";
+        if (newVal) {
+            val = "TRUE";
+        }
+
+        try {
+            db.execSQL("UPDATE Tasks SET completed = " + val + " WHERE taskID = '" + id + "'");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
