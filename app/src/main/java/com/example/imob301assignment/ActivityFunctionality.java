@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,7 +93,7 @@ public class ActivityFunctionality {
             taskDueDate.setText("Due Date: " + taskDueDates.get(position));
 
             TextView taskModuleID = convertView.findViewById(R.id.itemTaskModuleId);
-            taskModuleID.setText("Module ID: " + moduleIDs.get(position));
+            taskModuleID.setText("Module: " + moduleIDs.get(position));
 
             CheckBox completed = convertView.findViewById(R.id.itemTaskCompleted);
             boolean val = false;
@@ -269,6 +270,7 @@ public class ActivityFunctionality {
         EditText taskDueDate = _baseView.findViewById(R.id.taskDueDate);
         EditText taskModule = _baseView.findViewById(R.id.taskModuleID);
         Button btn = _baseView.findViewById(R.id.btnAddTask);
+
         DatePickerDialog.OnDateSetListener date =new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -325,7 +327,8 @@ public class ActivityFunctionality {
         });
     }
     public void ViewTasks(){
-        Cursor cursor = myDB.getAllItems("Tasks");
+//        Cursor cursor = myDB.getAllItems("Tasks");
+        Cursor cursor = myDB.getTasks();
         List<String> taskIDs = new ArrayList<>();
         List<String> names = new ArrayList<>();
         List<String> moduleIDs = new ArrayList<>();
@@ -333,8 +336,8 @@ public class ActivityFunctionality {
         List<Integer> completedTasks = new ArrayList<>();
 
         int COL_1 = cursor.getColumnIndex ("taskID");
-        int COL_2 = cursor.getColumnIndex ("name");
-        int COL_3 = cursor.getColumnIndex ("moduleID");
+        int COL_2 = cursor.getColumnIndex ("taskName");
+        int COL_3 = cursor.getColumnIndex ("moduleName");
         int COL_4 = cursor.getColumnIndex ("dueDate");
         int COL_5 = cursor.getColumnIndex("completed");
 

@@ -67,6 +67,17 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getTasks() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT taskID, Tasks.name AS taskName, Modules.name AS moduleName, dueDate, completed FROM Tasks " +
+                        "LEFT JOIN Modules ON Modules.moduleID = Tasks.moduleID";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
+    }
+
     public Cursor getUser(String tableName, String userName, String userPass) {
         SQLiteDatabase db = this.getWritableDatabase();
 
