@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String taskSQL = "CREATE TABLE Tasks (taskID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "name VARCHAR(255), dueDate DATE, moduleID INTEGER, completed BOOLEAN DEFAULT 0," +
+                        "name VARCHAR(255), dueDate DATE, moduleID INTEGER, " +
                         "FOREIGN KEY (moduleID) REFERENCES Modules(moduleID) )";
 
         String modulesSQL = "CREATE TABLE Modules (moduleID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -30,17 +30,16 @@ public class DBHelper extends SQLiteOpenHelper {
         String instructorSQL = "CREATE TABLE Instructors (instructorID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                 "username VARCHAR(255), password VARCHAR(255) )";
 
-        String studentModulesSQL = "CREATE TABLE StudentModules (id INTEGER PRIMARY KEY " +
-                                    "AUTOINCREMENT, moduleID INTEGER, studentID INTEGER, " +
-                                    "FOREIGN KEY (moduleID) REFERENCES Modules(moduleID)," +
-                                    "FOREIGN KEY (studentID) REFERENCES Modules(moduleID))";
-
+        String studentTaskSQL = "CREATE TABLE StudentTasks (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                "studentID INTEGER, taskID INTEGER, completed BOOLEAN DEFAULT 0, " +
+                                "FOREIGN KEY (taskID) REFERENCES Tasks(taskID), " +
+                                "FOREIGN KEY (studentID) REFERENCES Students(studentID) )";
 
         db.execSQL(modulesSQL);
         db.execSQL(instructorSQL);
         db.execSQL(studentsSQL);
         db.execSQL(taskSQL);
-        // db.execSQL(studentModulesSQL);
+        db.execSQL(studentTaskSQL);
     }
 
     @Override
@@ -67,11 +66,13 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor getTasks() {
+    public Cursor getTasks(String studentID) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "SELECT taskID, Tasks.name AS taskName, Modules.name AS moduleName, dueDate, completed FROM Tasks " +
-                        "LEFT JOIN Modules ON Modules.moduleID = Tasks.moduleID";
+        String query = "SELECT Tasks.taskID AS taskID, Tasks.name AS taskName, Modules.name AS moduleName, dueDate, " +
+                        " completed FROM Tasks " +
+                        "LEFT JOIN StudentTasks ON StudentTasks.taskID = Tasks.taskID AND StudentTasks.studentID = " + studentID +
+                        " LEFT JOIN Modules ON Modules.moduleID = Tasks.moduleID " ;
 
         Cursor cursor = db.rawQuery(query, null);
 
@@ -89,7 +90,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public boolean updateCompletion(String id, boolean newVal) {
+    public boolean updateCompletion(String id, String studentID, boolean newVal) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String val = "FALSE";
@@ -97,8 +98,21 @@ public class DBHelper extends SQLiteOpenHelper {
             val = "TRUE";
         }
 
+        String findItems = "SELECT * FROM StudentTasks WHERE taskID = " + id + " AND studentID = " +
+                            studentID + "";
+
+        Cursor cursor = db.rawQuery(findItems, null);
+
         try {
-            db.execSQL("UPDATE Tasks SET completed = " + val + " WHERE taskID = '" + id + "'");
+            if (cursor.getCount() == 0) {
+                String query = "INSERT INTO StudentTasks (studentID, taskID, completed) " +
+                                "VALUES (" +  studentID + ", " + id + "," + val + ")";
+                db.execSQL(query);
+            } else {
+                String query = "UPDATE StudentTasks SET completed = " + val +
+                                " WHERE taskID = " + id + " AND studentID = " + studentID + "";
+                db.execSQL(query);
+            }
             return true;
         } catch (Exception e) {
             return false;

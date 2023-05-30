@@ -107,7 +107,8 @@ public class ActivityFunctionality {
             completed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    boolean result = myDB.updateCompletion(taskIDs.get(position), b);
+                    String studentID = MainActivity.preferences.getString("studentID", "1");
+                    boolean result = myDB.updateCompletion(taskIDs.get(position), studentID, b);
 
                     if (result) {
                         Toast.makeText(
@@ -327,8 +328,8 @@ public class ActivityFunctionality {
         });
     }
     public void ViewTasks(){
-//        Cursor cursor = myDB.getAllItems("Tasks");
-        Cursor cursor = myDB.getTasks();
+        String studentID = MainActivity.preferences.getString("studentID", "1");
+        Cursor cursor = myDB.getTasks(studentID);
         List<String> taskIDs = new ArrayList<>();
         List<String> names = new ArrayList<>();
         List<String> moduleIDs = new ArrayList<>();

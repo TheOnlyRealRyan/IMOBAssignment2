@@ -61,8 +61,18 @@ public class MainActivity extends AppCompatActivity {
                     Cursor cursor = myDB.getUser(tableName, userNameVal, passwordVal);
 
                     if (cursor.getCount() == 1) {
+
                         SharedPreferences.Editor myEdit = preferences.edit();
                         myEdit.putString("role", role.toLowerCase());
+
+                        if (tableName.equals("Students")) {
+                            cursor.moveToFirst();
+                            int id = cursor.getColumnIndex("studentID");
+                            String studentID = cursor.getString(id);
+
+                            myEdit.putString("studentID", studentID);
+                        }
+
                         myEdit.apply();
 
                         navigateToDashboard();
